@@ -543,11 +543,19 @@ app.controller("JoeBannanas", function ($rootScope, $scope, $http, $window) {
 			token: $window.sessionStorage["token"]
 		}).then(function (response) {
 			$rootScope.user.byteCoins = $scope.byteCoins = response.data;
+			$scope.maxByteCoins = ($rootScope.user.byteCoins < 200) ? 200 : $rootScope.user.byteCoins;
 		}, function (response) {
 			displayMessage("Could not properly get your number of Byte Coins. Please log in and try again", "danger");
 		});
 	};
 	$scope.refreshByteCoins();
+	//Must be done ASAP, but after we set $scope.maxByteCoins
+	$('#byteCoinsWagered').slider({
+		formatter: function (value) {
+			return 'Byte Coins: ' + value;
+		},
+		tooltip: 'hide'
+	});
 	
 	$scope.selectedMatch = false;
 	
